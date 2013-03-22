@@ -1,7 +1,8 @@
 <div id="myCarousel" class="carousel slide">
     <div class="carousel-inner">
         <?php
-        query_posts( 'post_type=post' );
+        $sticky = get_option( 'sticky_posts' );
+        query_posts( array('post_type' => 'post', 'post__in' => $sticky) );
         $i = 0;
         if ( have_posts() ) : while ( have_posts() ) : the_post();
         ?>

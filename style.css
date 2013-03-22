@@ -8,7 +8,7 @@ Author URI: http://prmv.ru/
 
 */
 @import url(http://fonts.googleapis.com/css?family=Cuprum&subset=cyrillic);
-@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+/*@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=latin,cyrillic-ext,cyrillic,latin-ext);*/
 @import url(http://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic-ext,latin-ext,cyrillic);
 
 @import 'css/layout.css';
@@ -16,5 +16,6 @@ Author URI: http://prmv.ru/
 @import 'css/navbar.css';
 @import 'css/carousel.css';
 @import 'css/post.css';
+@import 'css/footer.css';
 
 

@@ -39,3 +39,6 @@ ul,li{
 .alignright{
     float: right;
 }
+.category_more_button{
+    /*float: left;*/
+}
