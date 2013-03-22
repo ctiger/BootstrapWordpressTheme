@@ -22,8 +22,13 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 			the_category();
 			print "</h4>";
 		}
-        the_post_thumbnail();
-		the_content('<a href="'.post_permalink().'#more-1">Читать далее...</a>');
+        if ( has_post_thumbnail() ) {
+            $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full');
+            print '<a href="' . $large_image_url[0] . '" title="' . the_title_attribute('echo=0') . '" rel="lightbox" >';
+            the_post_thumbnail('thumbnail');
+            print '</a>';
+        }
+        the_content('<a href="'.post_permalink().'#more-1">Читать далее...</a>');
 
 		?>
 	</div> <!-- post -->
