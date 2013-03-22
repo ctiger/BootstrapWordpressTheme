@@ -1,0 +1,41 @@
+body {
+    /*background: url("../img/leather_1.png");*/
+    background: url("../img/creampaper.png");
+/*    padding-top: 20px;
+    padding-bottom: 60px;*/
+}
+
+/* Custom container*/
+
+.container {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+.container > hr {
+    margin: 20px 0 30px 0;
+}
+
+.content{
+    background-color: #ffffff;
+    padding: 10px;
+    margin: -10px;
+    border-radius: 20px;
+    box-shadow: 0 0 5px #bababa;
+}
+
+/*----------------------------------------------------------------------------*/
+ul,li{
+    list-style: none;
+}
+.widgettitle{
+    font-family: 'Cuprum', sans-serif;
+    /*font-family: 'Roboto Condensed', sans-serif;*/
+    font-weight: 400;
+    color: #747474;
+}
+.alignleft{
+    float: left;
+}
+.alignright{
+    float: right;
+}

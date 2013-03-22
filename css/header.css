@@ -1,0 +1,28 @@
+.masthead{
+    /*min-height: 150px;*/
+}
+.masthead h3{
+    font-family: 'Lobster', sans-serif;
+    font-weight: 400;
+    font-size: 46px;
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+.masthead h3 a{
+    color: #d53433;
+}
+.masthead h6{
+    color: #747474;
+    /*padding-left: 40px;*/
+    padding-bottom: 20px;
+    margin-top: -15px;
+}
+.masthead .widget{
+    padding-top: 60px;
+}
+.center-widget{
+
+}
+.center-widget .widget{
+    /*border: 1px solid #bababa;*/
+}

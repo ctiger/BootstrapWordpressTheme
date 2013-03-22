@@ -1,0 +1,12 @@
+.post-wrapper{
+
+}
+.attachment-post-thumbnail{
+    float: left;
+    padding: 1px;
+    margin: 0 10px 10px 0;
+    border: 1px solid #373737;
+}
+#post p{
+    text-align: justify;
+}

@@ -1,0 +1,20 @@
+/*
+Theme Name: BootstrapWordpressTheme
+Theme URI: http://prmv.ru
+Description:
+Version: 0.1
+Author: Шамиль Пирумов
+Author URI: http://prmv.ru/
+
+*/
+@import url(http://fonts.googleapis.com/css?family=Cuprum&subset=cyrillic);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic-ext,latin-ext,cyrillic);
+
+@import 'css/layout.css';
+@import 'css/header.css';
+@import 'css/navbar.css';
+@import 'css/carousel.css';
+@import 'css/post.css';
+
+
