@@ -1,12 +1,28 @@
 <div id="myCarousel" class="carousel slide">
+    <?php
+    $myCounter = 0;
+    $sticky = get_option( 'sticky_posts' );
+    query_posts( array('post_type' => 'post', 'post__in' => $sticky) );
+    ?>
+    <ol class="carousel-indicators">
+        <?php
+        if ( have_posts() ) : while ( have_posts() ) : the_post();
+            $myCounter++;
+            ?>
+            <li data-target="#myCarousel" data-slide-to="<?php print ($myCounter-1); ?>"<?php if ($myCounter == 1) : print " class='active'"; endif; ?>></li>
+            <?php
+            endwhile;
+        endif;
+        ?>
+    </ol>
     <div class="carousel-inner">
         <?php
-        $sticky = get_option( 'sticky_posts' );
-        query_posts( array('post_type' => 'post', 'post__in' => $sticky) );
-        $i = 0;
+        $myCounter = 0;
+        rewind_posts();
         if ( have_posts() ) : while ( have_posts() ) : the_post();
-        ?>
-            <div class="item <?php if ($i == 0) : print "active"; endif; ?>">
+            $myCounter++;
+            ?>
+            <div class="item<?php if ($myCounter == 1) : print " active"; endif; ?>">
                 <?php the_post_thumbnail('full'); ?>
                 <div class="container">
                     <div class="carousel-caption">
@@ -16,8 +32,7 @@
                     </div>
                 </div> <!-- post -->
             </div> <!-- post-wrapper -->
-        <?php
-            $i++;
+            <?php
             endwhile;
         endif;
 
