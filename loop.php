@@ -7,7 +7,8 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 ?>
 
 	<div id="post" class="post-<?php the_ID(); ?>">
-        <?php if(is_category()){ ?>
+        <?php if( is_single() || is_page() && !is_front_page() ) { my_breadcrumb(); }?>
+        <?php if( is_category() ){ ?>
         <div class="row-fluid">
             <div class="span2">
                 <?php
@@ -34,11 +35,11 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
                     <?php } ?>
                 </h2>
                 <?php
-                if(!is_category()){
+/*                if(!is_category()){
         			print "<h4 class=\"post_category\">";
 	        		the_category();
 		        	print "</h4>";
-		        }
+		        }*/
                 if(!is_category()){
                     the_content('<a href="'.post_permalink().'" class="category_more_button"><i class="icon-chevron-right"></i></a>');
                 }

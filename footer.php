@@ -3,12 +3,16 @@
         <?php
         if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Нижний левый') ) :
         endif;
+        //Отобразить Google Analytics.
+        echo get_option('omr_tracking_code');
         ?>
+
     </div>
     <div class="span4">
         <?php
         if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Нижний правый') ) :
         endif;
+        echo stripslashes(get_option('nt_footer_text'));
         ?>
     </div>
 </div>
