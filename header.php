@@ -10,7 +10,9 @@
     <!-- Le styles -->
     <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <link href="<?php bloginfo("template_url"); ?>/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php bloginfo("template_url"); ?>/css/bootstrap-responsive.css" rel="stylesheet">
+    <?php if(get_option('nt_responsive_css')){ ?>
+        <link href="<?php bloginfo("template_url"); ?>/css/bootstrap-responsive.css" rel="stylesheet">
+    <?php } ?>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -42,43 +44,37 @@
         include("navbar.php");
         ?>
     </div>
+    <!-- Carousel ================================================== -->
     <?php
-    if( is_home() || is_front_page() ){
-        ?>
-        <!-- Carousel
-        ================================================== -->
-        <?php
-        include("carousel.php");
-        ?>
-
-
-        <hr>
-        <?php } ?>
-        <!-- Example row of columns -->
-        <div class="row-fluid center-widget">
-            <div class="span3">
-                <?php
-                if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Центр левый 1') ) :
-                endif;
-                ?>
-            </div>
-            <div class="span3">
-                <?php
-                if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Центр левый 2') ) :
-                endif;
-                ?>
-            </div>
-            <div class="span3">
-                <?php
-                if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Центр правый 1') ) :
-                endif;
-                ?>
-            </div>
-            <div class="span3">
-                <?php
-                if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Центр правый 2') ) :
-                endif;
-                ?>
-            </div>
-        </div>
-        <hr>
+    if(get_option("nt_show_carousel") != "Не показывать"){
+        if(get_option("nt_show_carousel") == "Только на главной"){
+            if(is_home() || is_front_page()) {
+                include("carousel.php");
+            }
+        }else{
+            if(get_option("nt_show_carousel") == "Везде"){
+                if(is_single() || is_page()) {
+                    include("carousel.php");
+                }
+            }
+        }
+    }
+    ?>
+    <!-- End Carousel ============================================= -->
+    <!-- Central Widgets ========================================== -->
+    <?php
+    if(get_option("nt_show_centralwidgets") != "Не показывать"){
+        if(get_option("nt_show_centralwidgets") == "Только на главной"){
+            if(is_home() || is_front_page()) {
+                include("central_widgets.php");
+            }
+        }else{
+            if(get_option("nt_show_centralwidgets") == "Везде"){
+                if(is_single() || is_page()) {
+                    include("central_widgets.php");
+                }
+            }
+        }
+    }
+    ?>
+    <!-- End Central Widgets ============================================= -->

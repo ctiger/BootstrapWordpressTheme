@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-top">
+<div class="navbar<?php if(get_option('nt_fixed_topmenu')) { print " navbar-fixed-top"; } ?>">
     <div class="navbar-inner">
         <div class="container">
             <ul class="nav">

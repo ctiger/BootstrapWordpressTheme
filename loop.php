@@ -42,6 +42,25 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 		        }*/
                 if(!is_category()){
                     the_content('<a href="'.post_permalink().'" class="category_more_button"><i class="icon-chevron-right"></i></a>');
+                    if(!is_page()){
+                    ?>
+                        <p>
+                        <?php
+                        $posttags = get_the_tags();
+                        if ($posttags) {
+                            print "Метки: ";
+                            foreach($posttags as $tag) {
+                                print "<a href=\"".get_tag_link($tag->term_id)."\"><span class=\"label label-info\">".$tag->name."</span></a> ";
+                            }
+                            print "| ";
+                        }
+                        ?>
+                        <i class="icon-user"></i> <?php the_author(); ?>
+                        | <i class="icon-calendar"></i> <?php the_time("d F, Y"); ?>
+                        | <i class="icon-comment"></i> <?php comments_popup_link(__('Комментариев нет','templatelite'),__('1 комментарий','templatelite'), __('% комент.','templatelite'), '',__('','templatelite')); ?>
+                    </p>
+                    <?php
+                    }
                 }
                 if(is_category()){
 		        ?>
@@ -49,6 +68,12 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
         </div>
         <?php } ?>
 	</div> <!-- post -->
+    <?php
+    if(is_single()){
+        print "<hr>";
+        comments_template( '', true );
+    }
+    ?>
     <p class="clearfix"></p>
 
 <?php

@@ -188,32 +188,16 @@ function my_breadcrumb() {
 $themename = "Дополнит. настройки";
 $shortname = "nt";
 
-$categories = get_categories('hide_empty=0&order_by=name');
-$wp_cats = array();
-
-foreach ($categories as $category_list){
-    $wp_cats[$category_list -> cat_ID] = $category_list -> cat_name;
-}
-
-array_unshift($wp_cats, "Выберите рубрику");
-
 /*--------------------------------------------------------*/
 
 $options = array(
 
     array( "name" => "Настройки",
         "type" => "title" ),
-
+    /*===========================================================*/
     array ( "name" => "Основные настройки",
         "type" => "section" ),
     array ( "type" => "open"),
-
-    array ( "name" => "Цветовая схема",
-        "desc" => "Выберите цветовую схему темы",
-        "id" => $shortname . "_color_scheme",
-        "type" => "select",
-        "options" => array ("синяя", "красная", "зеленая"),
-        "std" => "blue" ),
 
     array ( "name" => "URL Логотипа",
         "desc" => "Введите ссылку к картинке логотипа",
@@ -227,27 +211,50 @@ $options = array(
         "type" => "textarea",
         "std" => "" ),
 
-    array ( "type" => "close"),
+    array ( "name" => "Responsive CSS",
+        "desc" => "Включать адаптивный Bootstrap CSS-код?",
+        "id" => $shortname . "_responsive_css",
+        "type" => "checkbox",
+        "std" => "" ),
 
-    array ( "name" => "Домашняя страница",
+    array ( "name" => "Верхнее меню",
+        "desc" => "Прикрепить верхнее меню?",
+        "id" => $shortname . "_fixed_topmenu",
+        "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "type" => "close"),
+    /*===========================================================*/
+
+    array ( "name" => "Карусель",
         "type" => "section" ),
 
     array ("type" => "open"),
 
-    array ( "name" => "Картинка в шапке, на главной странице",
-        "desc" => "Введите URL картинки, которая будет использоваться в шапке",
-        "id" => $shortname ."_header_img",
-        "type" => "text",
-        "std" => ""),
-
-    array ( "name" => "Рубрика домашней страницы",
-        "desc" => "Выберите рубрику, в которую будут публиковатся записи",
-        "id" => $shortname ."_feat_cat",
+    array ( "name" => "Показывать карусель",
+        "desc" => "Укажите, где показывать карусель",
+        "id" => $shortname . "_show_carousel",
         "type" => "select",
-        "options" => $wp_cats,
-        "std" => "Выберите рубрику"),
+        "options" => array ("Не показывать", "Только на главной", "Везде"),
+        "std" => "Только на главной" ),
 
     array ( "type" => "close"),
+    /*===========================================================*/
+
+    array ( "name" => "Центральные виджеты",
+        "type" => "section" ),
+
+    array ("type" => "open"),
+
+    array ( "name" => "Показывать центральные виджеты",
+        "desc" => "Укажите, где показывать центральные виджеты",
+        "id" => $shortname . "_show_centralwidgets",
+        "type" => "select",
+        "options" => array ("Не показывать", "Только на главной", "Везде"),
+        "std" => "Везде" ),
+
+    array ( "type" => "close"),
+    /*===========================================================*/
 
     array ( "name" => "Подвал",
         "type" => "section"),
@@ -279,7 +286,7 @@ $options = array(
         "std" => get_bloginfo('rss2_url')),
 
     array( "type" => "close")
-
+    /*===========================================================*/
 );
 
 /*--------------------------------------------------------*/
@@ -322,8 +329,12 @@ function mytheme_add_admin(){
 
 function mytheme_add_init() {
     $file_dir = get_bloginfo('template_directory');
-    wp_enqueue_style("admin_panel", $file_dir."/css/admin-panel.css", false, "1.0", "all");
-    wp_enqueue_script("admin_panel", $file_dir."/js/admin-panel.js", false, "1.0");
+    wp_enqueue_style("admin_panel", $file_dir."/css/admin-panel.css");
+    wp_enqueue_script("admin_panel", $file_dir."/js/admin-panel.js");
+    wp_enqueue_script("jQuery", "https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js");
+    /*wp_enqueue_style("Bootstrap", $file_dir."/css/bootstrap.min.css");*/
+    wp_enqueue_style("bootstrapSwitch", $file_dir."/css/bootstrapSwitch.css");
+    wp_enqueue_script("bootstrapSwitch", $file_dir."/js/bootstrapSwitch.js");
 }
 
 function mytheme_admin(){
@@ -374,7 +385,7 @@ function mytheme_admin(){
                     </label>
 
                     <input name="<?php echo $value['id']?>" id="<?php echo $value['id']?>" type="<?php echo $value['type']?>"
-                           value="<?php if (get_settings($value['id']) != ""){ echo stripslashes(get_settings($value['id'])); } else {echo $value["std"];} ?>" />
+                           value="<?php if (get_option($value['id']) != ""){ echo stripslashes(get_option($value['id'])); } else {echo $value["std"];} ?>" />
 
                     <small><?php echo $value['desc']; ?></small>
                     <div class="clearfix"></div>
@@ -391,8 +402,8 @@ function mytheme_admin(){
                     </label>
 
                     <textarea name="<?php echo $value['id']?>" type="<?php echo $value['type']?>" >
-                        <?php if (get_settings($value['id']) != ""){
-                            echo stripslashes(get_settings($value['id']));
+                        <?php if (get_option($value['id']) != ""){
+                            echo stripslashes(get_option($value['id']));
                         }else {
                             echo $value["std"];
                         }?>
@@ -414,7 +425,7 @@ function mytheme_admin(){
 
                     <select name="<?php echo $value['id']; ?>" id="<?php echo $value['id']; ?>">
                         <?php foreach ($value['options'] as $option) : ?>
-                            <option <?php if(get_settings($value['id']) == $option){ echo "selected=selected";} ?>>
+                            <option <?php if(get_option($value['id']) == $option){ echo "selected=selected";} ?>>
                                 <?php echo $option; ?>
                             </option>
                         <?php endforeach; ?>
@@ -434,15 +445,20 @@ function mytheme_admin(){
                         <?php echo $value['name']?>
                     </label>
 
-                    <?php if(get_options($value['id'])){
-                        $checked = "checked=\"checked\"";
+                    <?php if(get_option($value['id'])){
+                        /*$checked = "checked=\"checked\"";*/
+                        $checked = "checked";
                     }else{
                         $checked = "";
                     }
                     ?>
 
-                    <input type="checkbox" name="<?php echo $value['id']?>" id="<?php echo $value['id']?>" value="true" <?php echo $checked; ?> />
-
+                    <div class="switch" data-on-label="ВКЛ." data-off-label="Выкл." data-animated="false" data-on="success" data-off="danger">
+                        <input type="checkbox" name="<?php echo $value['id']?>" id="<?php echo $value['id']?>" value="true" <?php echo $checked; ?> />
+                    </div>
+<!--                    <script>
+                        $('#normal-toggle-button').toggleButtons();
+                    </script>-->
                     <small><?php echo $value['desc']; ?></small>
                     <div class="clearfix"></div>
                 </div>
@@ -461,7 +477,7 @@ function mytheme_admin(){
                     </h3>
 
                      <span class="submit">
-                            <input name="save<?php echo $i; ?>" type="submit" value="Сохранить" />
+                            <button name="save<?php echo $i; ?>" type="submit" class="btn">Сохранить</button>
                      </span>
                     <div class="clearfix"></div>
                 </div>
@@ -481,10 +497,67 @@ function mytheme_admin(){
             <input name="action" type="hidden" value="reset" />
         </p>
     </form>
-
+    <a href="https://github.com/ctiger/BootstrapWordpressTheme"><img
+            style="position: absolute; top: 0; right: 0; border: 0;"
+            src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
+            alt="Fork me on GitHub"></a>
+    <div class="row-fluid">
+        <div class="span8 offset2" style="text-align: center;">
+            <iframe src="http://ghbtns.com/github-btn.html?user=ctiger&repo=BootstrapWordpressTheme&type=watch&count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=ctiger&repo=BootstrapWordpressTheme&type=fork&count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=ctiger&type=follow&count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+        </div>
+    </div>
     </div>
 
 <?php  }
 
 add_action('admin_init', 'mytheme_add_init');
 add_action('admin_menu', 'mytheme_add_admin');
+
+function templatelite_comment( $comment, $args, $depth ) {
+    $GLOBALS['comment'] = $comment;
+    switch ( $comment->comment_type ) :
+        case '' :
+            ?>
+            <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+            <div id="comment-<?php comment_ID(); ?>">
+                <div class="comment-author vcard">
+                    <?php echo get_avatar( $comment, 40 ); ?>
+                    <?php printf( __( '%s <span class="says">сказал:</span>', 'templatelite' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
+                </div><!-- .comment-author .vcard -->
+
+                <div class="comment-meta commentmetadata">
+                    <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
+                        <?php
+                        printf( __( '%1$s в %2$s', 'templatelite' ), get_comment_date(),  get_comment_time() ); /* translators: 1: date, 2: time */
+                        ?>
+                    </a>
+                    <?php edit_comment_link(__('Edit','templatelite'),'(',') ');?>
+                </div><!-- .comment-meta .commentmetadata -->
+
+                <div class="comment-body">
+                    <?php if ( $comment->comment_approved == '0' ) : ?>
+                        <em><?php _e('Ваш комментарий ожидает одобрения хозяина блога.');?></em><br/><br/>
+                    <?php endif; ?>
+                    <?php comment_text(); ?>
+                </div>
+
+                <div class="reply">
+                    <?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+                </div><!-- .reply -->
+            </div><!-- #comment-##  -->
+            <?php
+            break;
+        case 'pingback'  :
+        case 'trackback' :
+            ?>
+            <li class="post pingback">
+            <div><?php _e( 'Pingback:', 'templatelite' ); ?> <?php comment_author_link(); ?><?php edit_comment_link(__('Изменить','templatelite'),'(',') '); ?></div>
+            <?php
+            break;
+    endswitch;
+}
