@@ -7,7 +7,7 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 ?>
 
 	<div id="post" class="post-<?php the_ID(); ?>">
-        <?php if( is_single() || is_page() && !is_front_page() ) { my_breadcrumb(); }?>
+        <?php if( is_single() || is_page() && !is_front_page() ) { breadcrumbs(); }?>
         <?php if( is_category() ){ ?>
         <div class="row-fluid">
             <div class="span2">

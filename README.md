@@ -1,5 +1,9 @@
 BootstrapWordpressTheme
 =======================
+* v 0.2.2
+Change breadcrumb function.
+Add widgets: show children pages & show single post.
+
 * v 0.2.1
 Added real options in advanced settings panel.
 Added comments in posts.

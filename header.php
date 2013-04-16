@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html <?php language_attributes(); ?>>
+<!--[if IE 7]>
+<html class="ie ie7" <?php language_attributes(); ?>>
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" <?php language_attributes(); ?>>
+<![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!-->
+<html <?php language_attributes(); ?>>
+<!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <title><?php wp_title('|',1,'right'); ?> <?php bloginfo('name'); ?></title>
@@ -41,7 +50,7 @@
             </div>
         </div>
         <?php
-        include("navbar.php");
+        //include("navbar.php");
         ?>
     </div>
     <!-- Carousel ================================================== -->

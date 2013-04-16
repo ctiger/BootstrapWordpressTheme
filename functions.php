@@ -77,17 +77,12 @@ if ( function_exists('register_sidebar') )
     ));
 }
 
-function wpbootstrap_scripts_with_jquery()
+/*function wpbootstrap_scripts_with_jquery()
 {
-
-// Register the script like this for a theme: 
     wp_register_script( 'custom-script', get_template_directory_uri() . '/js/bootstrap.js', array( 'jquery' ) );
-
-// For either a plugin or a theme, you can then enqueue the script: 
     wp_enqueue_script( 'custom-script' );
 }
-
-add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
+add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );*/
 
 class description_walker extends Walker_Nav_Menu
 {
@@ -154,32 +149,134 @@ function bones_main_nav_fallback() {
     // Figure out how to make this output bootstrap-friendly html
     //wp_page_menu( 'show_home=Home&menu_class=nav' );
 }
-function my_breadcrumb() {
-    print "<ul class='breadcrumb'>";
-    if ( !is_front_page() ) {
-        echo "<li><a href=\"";
-        echo get_option('home');
-        echo "\">";
-        echo "Главная";
-	  echo "</a></li> <span class='divider'>/</span> ";
-	}
 
-	if ( is_category() || is_single() ) {
-	  $category = get_the_category();
-	  $ID = $category[0]->cat_ID;
-	  echo get_category_parents($ID, TRUE, ' / ', FALSE );
-	}
+function breadcrumbs() {
 
-	if(is_single() || is_page()) { echo "<li class='active'>"; the_title(); echo "</li>"; }
-	if(is_tag()){ echo "Tag: ".single_tag_title('',FALSE); }
-	if(is_404()){ echo "404 - Page not Found"; }
-	if(is_search()){ echo "Search"; }
-	if(is_year()){ echo get_the_time('Y'); }
+    /* === ОПЦИИ === */
+    $text['home']     = 'Главная'; // текст ссылки "Главная"
+    $text['category'] = 'Архив рубрики "%s"'; // текст для страницы рубрики
+    $text['search']   = 'Результаты поиска по запросу "%s"'; // текст для страницы с результатами поиска
+    $text['tag']      = 'Записи с тегом "%s"'; // текст для страницы тега
+    $text['author']   = 'Статьи автора %s'; // текст для страницы автора
+    $text['404']      = 'Ошибка 404'; // текст для страницы 404
 
-	echo "</ul>";
+    $showCurrent = 1; // 1 - показывать название текущей статьи/страницы, 0 - не показывать
+    $showOnHome  = 0; // 1 - показывать "хлебные крошки" на главной странице, 0 - не показывать
+    $delimiter   = ' » '; // разделить между "крошками"
+    $before      = '<span class="current">'; // тег перед текущей "крошкой"
+    $after       = '</span>'; // тег после текущей "крошки"
+    /* === КОНЕЦ ОПЦИЙ === */
 
-}//function
+    global $post;
+    $homeLink = get_bloginfo('url') . '/';
+    $linkBefore = '<span typeof="v:Breadcrumb">';
+    $linkAfter = '</span>';
+    $linkAttr = ' rel="v:url" property="v:title"';
+    $link = $linkBefore . '<a' . $linkAttr . ' href="%1$s">%2$s</a>' . $linkAfter;
 
+    if (is_home() || is_front_page()) {
+
+        if ($showOnHome == 1) echo '<ul class="breadcrumb"><a href="' . $homeLink . '">' . $text['home'] . '</a></ul>';
+
+    } else {
+
+        echo '<ul class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#">' . sprintf($link, $homeLink, $text['home']) . $delimiter;
+
+        if ( is_category() ) {
+            $thisCat = get_category(get_query_var('cat'), false);
+            if ($thisCat->parent != 0) {
+                $cats = get_category_parents($thisCat->parent, TRUE, $delimiter);
+                $cats = str_replace('<a', $linkBefore . '<a' . $linkAttr, $cats);
+                $cats = str_replace('</a>', '</a>' . $linkAfter, $cats);
+                echo $cats;
+            }
+            echo $before . sprintf($text['category'], single_cat_title('', false)) . $after;
+
+        } elseif ( is_search() ) {
+            echo $before . sprintf($text['search'], get_search_query()) . $after;
+
+        } elseif ( is_day() ) {
+            echo sprintf($link, get_year_link(get_the_time('Y')), get_the_time('Y')) . $delimiter;
+            echo sprintf($link, get_month_link(get_the_time('Y'),get_the_time('m')), get_the_time('F')) . $delimiter;
+            echo $before . get_the_time('d') . $after;
+
+        } elseif ( is_month() ) {
+            echo sprintf($link, get_year_link(get_the_time('Y')), get_the_time('Y')) . $delimiter;
+            echo $before . get_the_time('F') . $after;
+
+        } elseif ( is_year() ) {
+            echo $before . get_the_time('Y') . $after;
+
+        } elseif ( is_single() && !is_attachment() ) {
+            if ( get_post_type() != 'post' ) {
+                $post_type = get_post_type_object(get_post_type());
+                $slug = $post_type->rewrite;
+                printf($link, $homeLink . '/' . $slug['slug'] . '/', $post_type->labels->singular_name);
+                if ($showCurrent == 1) echo $delimiter . $before . get_the_title() . $after;
+            } else {
+                $cat = get_the_category(); $cat = $cat[0];
+                $cats = get_category_parents($cat, TRUE, $delimiter);
+                if ($showCurrent == 0) $cats = preg_replace("#^(.+)$delimiter$#", "$1", $cats);
+                $cats = str_replace('<a', $linkBefore . '<a' . $linkAttr, $cats);
+                $cats = str_replace('</a>', '</a>' . $linkAfter, $cats);
+                echo $cats;
+                if ($showCurrent == 1) echo $before . get_the_title() . $after;
+            }
+
+        } elseif ( !is_single() && !is_page() && get_post_type() != 'post' && !is_404() ) {
+            $post_type = get_post_type_object(get_post_type());
+            echo $before . $post_type->labels->singular_name . $after;
+
+        } elseif ( is_attachment() ) {
+            $parent = get_post($post->post_parent);
+            $cat = get_the_category($parent->ID); $cat = $cat[0];
+            $cats = get_category_parents($cat, TRUE, $delimiter);
+            $cats = str_replace('<a', $linkBefore . '<a' . $linkAttr, $cats);
+            $cats = str_replace('</a>', '</a>' . $linkAfter, $cats);
+            echo $cats;
+            printf($link, get_permalink($parent), $parent->post_title);
+            if ($showCurrent == 1) echo $delimiter . $before . get_the_title() . $after;
+
+        } elseif ( is_page() && !$post->post_parent ) {
+            if ($showCurrent == 1) echo $before . get_the_title() . $after;
+
+        } elseif ( is_page() && $post->post_parent ) {
+            $parent_id  = $post->post_parent;
+            $breadcrumbs = array();
+            while ($parent_id) {
+                $page = get_page($parent_id);
+                $breadcrumbs[] = sprintf($link, get_permalink($page->ID), get_the_title($page->ID));
+                $parent_id  = $page->post_parent;
+            }
+            $breadcrumbs = array_reverse($breadcrumbs);
+            for ($i = 0; $i < count($breadcrumbs); $i++) {
+                echo $breadcrumbs[$i];
+                if ($i != count($breadcrumbs)-1) echo $delimiter;
+            }
+            if ($showCurrent == 1) echo $delimiter . $before . get_the_title() . $after;
+
+        } elseif ( is_tag() ) {
+            echo $before . sprintf($text['tag'], single_tag_title('', false)) . $after;
+
+        } elseif ( is_author() ) {
+            global $author;
+            $userdata = get_userdata($author);
+            echo $before . sprintf($text['author'], $userdata->display_name) . $after;
+
+        } elseif ( is_404() ) {
+            echo $before . $text['404'] . $after;
+        }
+
+        if ( get_query_var('paged') ) {
+            if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ' (';
+            echo __('Page') . ' ' . get_query_var('paged');
+            if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ')';
+        }
+
+        echo '</ul>';
+
+    }
+} // end breadcrumbs()
 
 /**
  * ПАНЕЛЬ НАСТРОЕК
@@ -331,10 +428,11 @@ function mytheme_add_init() {
     $file_dir = get_bloginfo('template_directory');
     wp_enqueue_style("admin_panel", $file_dir."/css/admin-panel.css");
     wp_enqueue_script("admin_panel", $file_dir."/js/admin-panel.js");
-    wp_enqueue_script("jQuery", "https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js");
+    //wp_enqueue_script("jQuery", "https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js");
+    //wp_enqueue_script("jQuery", "http://code.jquery.com/jquery-1.9.1.min.js");
     /*wp_enqueue_style("Bootstrap", $file_dir."/css/bootstrap.min.css");*/
-    wp_enqueue_style("bootstrapSwitch", $file_dir."/css/bootstrapSwitch.css");
-    wp_enqueue_script("bootstrapSwitch", $file_dir."/js/bootstrapSwitch.js");
+    //wp_enqueue_style("bootstrapSwitch", $file_dir."/css/bootstrapSwitch.css");
+    //wp_enqueue_script("bootstrapSwitch", $file_dir."/js/bootstrapSwitch.js");
 }
 
 function mytheme_admin(){
@@ -346,13 +444,13 @@ function mytheme_admin(){
 
     if($_REQUEST['reset'])
         echo '<div id="message" class="updated fade"><p><strong> настройки темы '. $themename .' были сброшены</strong></p></div>';
-?>
+    ?>
 
-<div class="wrap rm_wrap">
+    <div class="wrap rm_wrap">
     <h2>Настройки <?php echo $themename ?></h2>
 
     <div class="rm_opts">
-        <form method="post">
+    <form method="post">
     <?php foreach($options as $value) {
         switch ($value['type']){
             case "open" :
@@ -456,9 +554,9 @@ function mytheme_admin(){
                     <div class="switch" data-on-label="ВКЛ." data-off-label="Выкл." data-animated="false" data-on="success" data-off="danger">
                         <input type="checkbox" name="<?php echo $value['id']?>" id="<?php echo $value['id']?>" value="true" <?php echo $checked; ?> />
                     </div>
-<!--                    <script>
-                        $('#normal-toggle-button').toggleButtons();
-                    </script>-->
+                    <!--                    <script>
+                                            $('#normal-toggle-button').toggleButtons();
+                                        </script>-->
                     <small><?php echo $value['desc']; ?></small>
                     <div class="clearfix"></div>
                 </div>
@@ -520,44 +618,124 @@ add_action('admin_menu', 'mytheme_add_admin');
 
 function templatelite_comment( $comment, $args, $depth ) {
     $GLOBALS['comment'] = $comment;
-    switch ( $comment->comment_type ) :
-        case '' :
-            ?>
-            <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
-            <div id="comment-<?php comment_ID(); ?>">
-                <div class="comment-author vcard">
-                    <?php echo get_avatar( $comment, 40 ); ?>
-                    <?php printf( __( '%s <span class="says">сказал:</span>', 'templatelite' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
-                </div><!-- .comment-author .vcard -->
+switch ( $comment->comment_type ) :
+case '' :
+    ?>
+    <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+        <div id="comment-<?php comment_ID(); ?>">
+            <div class="comment-author vcard">
+                <?php echo get_avatar( $comment, 40 ); ?>
+                <?php printf( __( '%s <span class="says">сказал:</span>', 'templatelite' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
+            </div><!-- .comment-author .vcard -->
 
-                <div class="comment-meta commentmetadata">
-                    <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
-                        <?php
-                        printf( __( '%1$s в %2$s', 'templatelite' ), get_comment_date(),  get_comment_time() ); /* translators: 1: date, 2: time */
-                        ?>
-                    </a>
-                    <?php edit_comment_link(__('Edit','templatelite'),'(',') ');?>
-                </div><!-- .comment-meta .commentmetadata -->
+            <div class="comment-meta commentmetadata">
+                <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
+                    <?php
+                    printf( __( '%1$s в %2$s', 'templatelite' ), get_comment_date(),  get_comment_time() ); /* translators: 1: date, 2: time */
+                    ?>
+                </a>
+                <?php edit_comment_link(__('Edit','templatelite'),'(',') ');?>
+            </div><!-- .comment-meta .commentmetadata -->
 
-                <div class="comment-body">
-                    <?php if ( $comment->comment_approved == '0' ) : ?>
-                        <em><?php _e('Ваш комментарий ожидает одобрения хозяина блога.');?></em><br/><br/>
-                    <?php endif; ?>
-                    <?php comment_text(); ?>
-                </div>
+            <div class="comment-body">
+                <?php if ( $comment->comment_approved == '0' ) : ?>
+                    <em><?php _e('Ваш комментарий ожидает одобрения хозяина блога.');?></em><br/><br/>
+                <?php endif; ?>
+                <?php comment_text(); ?>
+            </div>
 
-                <div class="reply">
-                    <?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-                </div><!-- .reply -->
-            </div><!-- #comment-##  -->
-            <?php
-            break;
+            <div class="reply">
+                <?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+            </div><!-- .reply -->
+        </div><!-- #comment-##  -->
+        <?php
+        break;
         case 'pingback'  :
         case 'trackback' :
-            ?>
-            <li class="post pingback">
-            <div><?php _e( 'Pingback:', 'templatelite' ); ?> <?php comment_author_link(); ?><?php edit_comment_link(__('Изменить','templatelite'),'(',') '); ?></div>
-            <?php
-            break;
-    endswitch;
+        ?>
+    <li class="post pingback">
+    <div><?php _e( 'Pingback:', 'templatelite' ); ?> <?php comment_author_link(); ?><?php edit_comment_link(__('Изменить','templatelite'),'(',') '); ?></div>
+    <?php
+    break;
+endswitch;
 }
+
+/* Widgets */
+/* Show one page */
+
+class WidgetPage extends WP_Widget{
+
+    public function WidgetPage() {
+        $widget_ops = array( 'classname' => 'widgetpage', 'description' => 'Отображает одиночную запись' );
+        $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetpage' );
+        parent::__construct( 'widgetpage', 'WidgetPage',
+            $widget_ops, $control_ops );
+    }
+
+    public function form($instance) {
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('page_id');?>"><?php _e("Введите ID страницы"); ?></label>:
+            <input type='text' id="<?php echo $this->get_field_id('page_id');?>" name="<?php echo $this->get_field_name('page_id');?>" value="<?php echo $instance['page_id'];?>">
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('page_excerpt');?>"><?php _e("Краткий текст"); ?></label>:
+            <textarea id="<?php echo $this->get_field_id('page_excerpt');?>" name="<?php echo $this->get_field_name('page_excerpt');?>" cols="25" rows="8"><?php echo $instance['page_excerpt'];?></textarea>
+        </p>
+    <?php
+    }
+
+    public function update($new_instance, $old_instance) {
+        return $new_instance;
+    }
+
+    public function widget($args, $instance) {
+        if ( $instance['page_id'] ){
+            echo $args['before_widget'],$args['before_title'];
+            $page = get_page($instance['page_id']);
+            echo $page->post_title;
+            echo $args['after_title'];
+            echo "<a href='".get_page_link($instance['page_id'])."'>".get_the_post_thumbnail( $instance['page_id'], 'medium', array('class' => 'img-frontpage') )."</a>";
+            if ( $instance['page_excerpt'] ){
+                echo "<p>".$instance['page_excerpt']."</p>";
+            }else{
+                echo "<p>".$page->post_content."</p>";
+            }
+            echo "<a class='btn btn-success' href='".get_page_link($instance['page_id'])."'>Подробнее</a>";
+            echo $args['after_widget'];
+        }
+    }
+}
+add_action('widgets_init', create_function('','return register_widget("WidgetPage");'));
+
+/* Show children pages */
+
+class WidgetChildrenPages extends WP_Widget{
+
+    public function WidgetChildrenPages() {
+        $widget_ops = array( 'classname' => 'widgetpage', 'description' => 'Отображает список вложенных страниц' );
+        $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetchildrenpages' );
+        parent::__construct( 'widgetchildrenpages', 'WidgetChildrenPages', $widget_ops, $control_ops );
+    }
+
+    public function form($instance) {
+
+    }
+
+    public function update($new_instance, $old_instance) {
+        return $new_instance;
+    }
+
+    public function widget($args, $instance) {
+        global $post;
+        $children = wp_list_pages('title_li=&child_of='.$post->ID.'&echo=0&sort_column=menu_order&sort_order=ASC&depth=1');
+        if($children){
+            echo $args['before_widget'],$args['before_title'];
+            echo $args['after_title'];
+            $children = preg_replace('%<a ([^>]+)>%U','<a $1 class="btn btn-success btn-block">', $children);
+            echo $children;
+            echo $args['after_widget'];
+        }
+    }
+}
+add_action('widgets_init', create_function('','return register_widget("WidgetChildrenPages");'));

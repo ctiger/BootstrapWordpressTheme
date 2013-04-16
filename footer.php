@@ -1,4 +1,4 @@
-<div class="row-fluid footer">
+<div class="row footer">
     <div class="span8">
         <?php
         if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Нижний левый') ) :
