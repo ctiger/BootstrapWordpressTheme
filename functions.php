@@ -666,10 +666,9 @@ endswitch;
 class WidgetPage extends WP_Widget{
 
     public function WidgetPage() {
-        $widget_ops = array( 'classname' => 'widgetpage', 'description' => 'Отображает одиночную запись' );
+        $widget_ops = array( 'classname' => 'widgetpage', 'description' => 'Отображает одиночную страницу' );
         $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetpage' );
-        parent::__construct( 'widgetpage', 'WidgetPage',
-            $widget_ops, $control_ops );
+        parent::__construct( 'widgetpage', 'WidgetPage', $widget_ops, $control_ops );
     }
 
     public function form($instance) {
@@ -707,6 +706,52 @@ class WidgetPage extends WP_Widget{
     }
 }
 add_action('widgets_init', create_function('','return register_widget("WidgetPage");'));
+
+/* Show single post */
+
+class WidgetPost extends WP_Widget{
+
+    public function WidgetPost() {
+        $widget_ops = array( 'classname' => 'widgetpost', 'description' => 'Отображает одиночную запись' );
+        $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetpost' );
+        parent::__construct( 'widgetpost', 'WidgetPost', $widget_ops, $control_ops );
+    }
+
+    public function form($instance) {
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('post_id');?>"><?php _e("Введите ID записи"); ?></label>:
+            <input type='text' id="<?php echo $this->get_field_id('post_id');?>" name="<?php echo $this->get_field_name('post_id');?>" value="<?php echo $instance['post_id'];?>">
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('post_excerpt');?>"><?php _e("Краткий текст"); ?></label>:
+            <textarea id="<?php echo $this->get_field_id('post_excerpt');?>" name="<?php echo $this->get_field_name('post_excerpt');?>" cols="25" rows="8"><?php echo $instance['post_excerpt'];?></textarea>
+        </p>
+    <?php
+    }
+
+    public function update($new_instance, $old_instance) {
+        return $new_instance;
+    }
+
+    public function widget($args, $instance) {
+        if ( $instance['post_id'] ){
+            echo $args['before_widget'],$args['before_title'];
+            $page = get_page($instance['post_id']);
+            echo $page->post_title;
+            echo $args['after_title'];
+            echo "<a href='".get_permalink($instance['post_id'])."'>".get_the_post_thumbnail( $instance['post_id'], 'medium', array('class' => 'img-frontpage') )."</a>";
+            if ( $instance['post_excerpt'] ){
+                echo "<p>".$instance['post_excerpt']."</p>";
+            }else{
+                echo "<p>".$page->post_content."</p>";
+            }
+            echo "<a class='btn btn-success' href='".get_permalink($instance['post_id'])."'>Подробнее</a>";
+            echo $args['after_widget'];
+        }
+    }
+}
+add_action('widgets_init', create_function('','return register_widget("WidgetPost");'));
 
 /* Show children pages */
 

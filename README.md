@@ -1,5 +1,9 @@
 BootstrapWordpressTheme
 =======================
+* v 0.2.2.1
+Fixed widget showing single post.
+Add widget: show single page.
+
 * v 0.2.2
 Change breadcrumb function.
 Add widgets: show children pages & show single post.

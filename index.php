@@ -6,7 +6,7 @@
                 include("loop.php");
             ?>
         </div>
-        <div class="span4">
+        <div class="span4 sidebar">
             <?php
                 include("sidebar.php");
             ?>
