@@ -162,16 +162,16 @@ function breadcrumbs() {
 
     $showCurrent = 1; // 1 - показывать название текущей статьи/страницы, 0 - не показывать
     $showOnHome  = 0; // 1 - показывать "хлебные крошки" на главной странице, 0 - не показывать
-    $delimiter   = ' » '; // разделить между "крошками"
-    $before      = '<span class="current">'; // тег перед текущей "крошкой"
-    $after       = '</span>'; // тег после текущей "крошки"
+    $delimiter   = '<span class="divider">/</span> </li>'; // разделить между "крошками"
+    $before      = '<li class="active">'; // тег перед текущей "крошкой"
+    $after       = '</li>'; // тег после текущей "крошки"
     /* === КОНЕЦ ОПЦИЙ === */
 
     global $post;
     $homeLink = get_bloginfo('url') . '/';
-    $linkBefore = '<span typeof="v:Breadcrumb">';
-    $linkAfter = '</span>';
-    $linkAttr = ' rel="v:url" property="v:title"';
+    $linkBefore = '<li>';
+    $linkAfter = '';
+    $linkAttr = '';
     $link = $linkBefore . '<a' . $linkAttr . ' href="%1$s">%2$s</a>' . $linkAfter;
 
     if (is_home() || is_front_page()) {
@@ -180,7 +180,7 @@ function breadcrumbs() {
 
     } else {
 
-        echo '<ul class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#">' . sprintf($link, $homeLink, $text['home']) . $delimiter;
+        echo '<ul class="breadcrumb">' . sprintf($link, $homeLink, $text['home']) . $delimiter;
 
         if ( is_category() ) {
             $thisCat = get_category(get_query_var('cat'), false);

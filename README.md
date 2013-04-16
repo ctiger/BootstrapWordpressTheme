@@ -1,5 +1,8 @@
 BootstrapWordpressTheme
 =======================
+* v 0.2.3<br />
+Fixed breadcrumbs style<br />
+<br />
 * v 0.2.2.3<br />
 Minor visual changes<br />
 <br />
@@ -28,6 +31,6 @@ Carousel shows the latest posts with attached thumbnail<br />
 * v 0.1<br />
 Support dropdown menu (func wp_nav_menu)<br />
 <br />
-============================
-Copyright by Shamil Pirumov<br />
+============================<br />
+<strong>Copyright by Shamil Pirumov</strong><br />
 sh@prmv.ru
