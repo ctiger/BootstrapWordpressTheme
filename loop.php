@@ -70,7 +70,6 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 	</div> <!-- post -->
     <?php
     if(is_single()){
-        print "<hr>";
         comments_template( '', true );
     }
     ?>

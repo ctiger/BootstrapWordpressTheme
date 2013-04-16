@@ -1,34 +1,33 @@
 BootstrapWordpressTheme
 =======================
-* v 0.2.2.1
-Fixed widget showing single post.
-Add widget: show single page.
-
-* v 0.2.2
-Change breadcrumb function.
-Add widgets: show children pages & show single post.
-
-* v 0.2.1
-Added real options in advanced settings panel.
-Added comments in posts.
-
-* v 0.2
-Added additional settings panel in the console.
-Add breadcrumbs in pages and posts.
-
-* v 0.1.3
-Added carousel indicators
-
-* v 0.1.2
-Carousel now shows only sticky posts
-Minor visual changes
-
-* v 0.1.1
-Carousel shows the latest posts with attached thumbnail
-
-* v 0.1
-Support dropdown menu (func wp_nav_menu)
-
+* v 0.2.2.3<br />
+Minor visual changes<br />
+<br />
+* v 0.2.2<br />
+Change breadcrumb function.<br />
+Add widgets: show children pages & show single post.<br />
+<br />
+* v 0.2.1<br />
+Added real options in advanced settings panel.<br />
+Added comments in posts.<br />
+<br />
+* v 0.2<br />
+Added additional settings panel in the console.<br />
+Add breadcrumbs in pages and posts.<br />
+<br />
+* v 0.1.3<br />
+Added carousel indicators<br />
+<br />
+* v 0.1.2<br />
+Carousel now shows only sticky posts<br />
+Minor visual changes<br />
+<br />
+* v 0.1.1<br />
+Carousel shows the latest posts with attached thumbnail<br />
+<br />
+* v 0.1<br />
+Support dropdown menu (func wp_nav_menu)<br />
+<br />
 ============================
-Copyright by Shamil Pirumov
+Copyright by Shamil Pirumov<br />
 sh@prmv.ru
