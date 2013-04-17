@@ -1,5 +1,9 @@
 BootstrapWordpressTheme
 =======================
+* v 0.3<br />
+Add select in widget options.<br />
+Fixed JS for Bootstrap.<br />
+<br />
 * v 0.2.3<br />
 Fixed breadcrumbs style<br />
 <br />

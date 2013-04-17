@@ -77,12 +77,12 @@ if ( function_exists('register_sidebar') )
     ));
 }
 
-/*function wpbootstrap_scripts_with_jquery()
+function wpbootstrap_scripts_with_jquery()
 {
     wp_register_script( 'custom-script', get_template_directory_uri() . '/js/bootstrap.js', array( 'jquery' ) );
     wp_enqueue_script( 'custom-script' );
 }
-add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );*/
+add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
 
 class description_walker extends Walker_Nav_Menu
 {
@@ -671,12 +671,23 @@ class WidgetPage extends WP_Widget{
         parent::__construct( 'widgetpage', 'WidgetPage', $widget_ops, $control_ops );
     }
 
-    public function form($instance) {
+    public function form($instance) { ?>
+        <label for="<?php echo $this->get_field_id('page_id');?>"><?php _e("Выберите страницу"); ?></label>:
+        <?php
+        echo '<select name="'.$this->get_field_name('page_id').'" id="'.$this->get_field_id('page_id').'">';
+        $pages = get_pages();
+        foreach ( $pages as $page ) {
+            $option = '<option value="' . $page->ID.'"';
+            if($page->ID == $instance['page_id']){
+                $option .= ' selected';
+            }
+            $option .= '>';
+            $option .= $page->post_title;
+            $option .= '</option>';
+            echo $option;
+        }
+        echo "</select>";
         ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('page_id');?>"><?php _e("Введите ID страницы"); ?></label>:
-            <input type='text' id="<?php echo $this->get_field_id('page_id');?>" name="<?php echo $this->get_field_name('page_id');?>" value="<?php echo $instance['page_id'];?>">
-        </p>
         <p>
             <label for="<?php echo $this->get_field_id('page_excerpt');?>"><?php _e("Краткий текст"); ?></label>:
             <textarea id="<?php echo $this->get_field_id('page_excerpt');?>" name="<?php echo $this->get_field_name('page_excerpt');?>" cols="25" rows="8"><?php echo $instance['page_excerpt'];?></textarea>
@@ -717,12 +728,23 @@ class WidgetPost extends WP_Widget{
         parent::__construct( 'widgetpost', 'WidgetPost', $widget_ops, $control_ops );
     }
 
-    public function form($instance) {
+    public function form($instance) { ?>
+        <label for="<?php echo $this->get_field_id('post_id');?>"><?php _e("Выберите запись"); ?></label>:
+        <?php
+        echo '<select name="'.$this->get_field_name('post_id').'" id="'.$this->get_field_id('post_id').'">';
+        $myposts = get_posts();
+        foreach( $myposts as $post ){
+            $option = '<option value="' . $post->ID.'"';
+            if($post->ID == $instance['post_id']){
+                $option .= ' selected';
+            }
+            $option .= '>';
+            $option .= $post->post_title;
+            $option .= '</option>';
+            echo $option;
+        }
+        echo "</select>";
         ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('post_id');?>"><?php _e("Введите ID записи"); ?></label>:
-            <input type='text' id="<?php echo $this->get_field_id('post_id');?>" name="<?php echo $this->get_field_name('post_id');?>" value="<?php echo $instance['post_id'];?>">
-        </p>
         <p>
             <label for="<?php echo $this->get_field_id('post_excerpt');?>"><?php _e("Краткий текст"); ?></label>:
             <textarea id="<?php echo $this->get_field_id('post_excerpt');?>" name="<?php echo $this->get_field_name('post_excerpt');?>" cols="25" rows="8"><?php echo $instance['post_excerpt'];?></textarea>

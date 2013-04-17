@@ -19,6 +19,7 @@
     <!-- Le styles -->
     <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <link href="<?php bloginfo("template_url"); ?>/css/bootstrap.css" rel="stylesheet">
+
     <?php if(get_option('nt_responsive_css')){ ?>
         <link href="<?php bloginfo("template_url"); ?>/css/bootstrap-responsive.css" rel="stylesheet">
     <?php } ?>
