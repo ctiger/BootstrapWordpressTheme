@@ -8,10 +8,16 @@
     border: 1px solid #373737;
     text-align: center;
 }
+#post .post_date{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
 #post .post_title{
     font-family: 'Cuprum', sans-serif;
     font-weight: 400;
 }
 #post p{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     text-align: justify;
 }

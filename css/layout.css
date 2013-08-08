@@ -3,6 +3,7 @@ body {
     background: url("../img/creampaper.png");
 /*    padding-top: 20px;
     padding-bottom: 60px;*/
+
 }
 
 /* Custom container*/
@@ -16,9 +17,9 @@ body {
 }
 
 .content{
-    background-color: #ffffff;
+/*    background-color: #ffffff;
     border-radius: 20px;
-    box-shadow: 0 0 5px #bababa;
+    box-shadow: 0 0 5px #bababa;*/
     padding: 15px;
     margin-top: 20px;
 }
@@ -26,6 +27,10 @@ body {
 /*----------------------------------------------------------------------------*/
 ul,li{
     list-style: none;
+}
+.widget{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
 }
 .widgettitle{
     font-family: 'Cuprum', sans-serif;

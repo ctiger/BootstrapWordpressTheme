@@ -25,7 +25,7 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
             <div class="span10">
                 <?php } ?>
                 <?php if(is_single() || is_category()){ ?>
-    		        <h6><?php the_time("d F, Y"); ?></h6>
+    		        <h6 class="post_date"><?php the_time("d F, Y"); ?></h6>
 	    	    <?php } ?>
                 <h2 class="post_title">
                     <?php if(!is_single() && !is_page()){ ?>
