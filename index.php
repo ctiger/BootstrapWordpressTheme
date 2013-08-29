@@ -1,16 +1,17 @@
 <?php get_header(); ?>
 
-    <div class="row-fluid content">
-        <div class="span8">
+    <div class="row content">
+        <div class="col-lg-9">
             <?php
                 include("loop.php");
             ?>
         </div>
-        <div class="span4 sidebar">
+        <div class="col-lg-3 sidebar">
             <?php
                 include("sidebar.php");
             ?>
         </div>
     </div>
-
+</div> <!--container-->
+</div> <!--wrap-->
 <?php get_footer(); ?>

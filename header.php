@@ -35,15 +35,15 @@
 </head>
 
 <body>
-
+<div id="wrap">
 <div class="container">
     <div class="masthead">
-        <div class="row-fluid">
-            <div class="span8">
+        <div class="row">
+            <div class="col-lg-8">
                 <h3 class="site-name"><a class="brand" href="<?php echo site_url(); ?>"><?php bloginfo('name'); ?></a></h3>
                 <h6 class="site-description"><?php bloginfo('description'); ?></h6>
             </div>
-            <div class="span4">
+            <div class="col-lg-4">
                 <?php
                 if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Верхний правый') ) :
                 endif;

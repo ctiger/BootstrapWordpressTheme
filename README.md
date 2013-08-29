@@ -1,5 +1,9 @@
 BootstrapWordpressTheme
 =======================
+* v 0.4<br />
+<b>Twitter Bootstrap 2.3.2 change to version 3.0.0</b><br />
+Change all grid<br />
+<br />
 * v 0.3<br />
 Add select in widget options.<br />
 Fixed JS for Bootstrap.<br />

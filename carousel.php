@@ -27,7 +27,7 @@
                 <div class="container">
                     <div class="carousel-caption">
                         <h1><?php the_title(); ?></h1>
-                        <p class="lead"><?php the_excerpt(); ?></p>
+                        <p><?php the_excerpt(); ?></p>
                         <a class="btn btn-large btn-primary" href="<?php the_permalink() ?>">Прочитать</a>
                     </div>
                 </div> <!-- post -->
@@ -40,6 +40,6 @@
         wp_reset_query();
         ?>
     </div>
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div> <!-- /.carousel -->

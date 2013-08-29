@@ -9,8 +9,8 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
 	<div id="post" class="post-<?php the_ID(); ?>">
         <?php if( is_single() || is_page() && !is_front_page() ) { breadcrumbs(); }?>
         <?php if( is_category() ){ ?>
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <?php
                 }
                 if ( has_post_thumbnail() ) {
@@ -22,7 +22,7 @@ if ( have_posts() ) : while ( have_posts() ) : the_post();
                 if(is_category()){
                 ?>
             </div>
-            <div class="span10">
+            <div class="col-lg-10">
                 <?php } ?>
                 <?php if(is_single() || is_category()){ ?>
     		        <h6 class="post_date"><?php the_time("d F, Y"); ?></h6>
