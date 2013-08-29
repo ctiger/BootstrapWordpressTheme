@@ -1,7 +1,7 @@
 <div id="footer">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <?php
                 if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Нижний левый') ) :
                 endif;
@@ -9,7 +9,7 @@
                 echo get_option('omr_tracking_code');
                 ?>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <?php
                 if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Нижний правый') ) :
                 endif;
@@ -24,7 +24,7 @@
     !function ($) {
         $(function(){
             // carousel demo
-            $('#myCarousel').carousel()
+            $('#myCarousel').carousel({<?php if(trim(get_option('nt_interval_carousel')) <> "") echo 'interval: '.get_option("nt_interval_carousel")?>})
         })
     }(window.jQuery)
 </script>

@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-    <div class="row content">
+    <div class="container content">
         <div class="col-lg-9">
             <?php
                 include("loop.php");
@@ -12,6 +12,5 @@
             ?>
         </div>
     </div>
-</div> <!--container-->
-</div> <!--wrap-->
+
 <?php get_footer(); ?>
