@@ -1,4 +1,4 @@
-<div class="row center-widget">
+<div class="container center-widget">
     <div class="col-lg-3">
         <?php
         if (!function_exists('dynamic_sidebar') || !dynamic_sidebar('Центр левый 1')) :

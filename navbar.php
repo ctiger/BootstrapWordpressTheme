@@ -1,6 +1,6 @@
 <div class="navbar navbar-default<?php if(get_option('nt_fixed_topmenu')) { print " navbar-fixed-top"; } ?>">
-    <div class="navbar-collapse collapse" role="navigation">
-        <!--<ul class="nav navbar-nav">-->
+    <div class="container">
+        <div class="navbar-collapse collapse" role="navigation">
             <?php
             wp_nav_menu(
                         array(
@@ -14,6 +14,6 @@
                         )
             );
             ?>
-        <!--</ul>-->
+        </div>
     </div>
 </div>

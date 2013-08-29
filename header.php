@@ -19,7 +19,16 @@
     <!-- Le styles -->
     <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <link href="<?php bloginfo("template_url"); ?>/css/bootstrap.css" rel="stylesheet">
-
+    <?php if(trim(get_option('nt_background')) <> ""){ ?>
+    <style>
+        body {
+            background: url("<?php echo get_option('nt_background'); ?>");
+            <?php if(get_option('nt_fixed_topmenu')) { ?>
+                padding-top: 50px;
+            <? } ?>
+        }
+    </style>
+    <?php } ?>
     <?php if(get_option('nt_responsive_css')){ ?>
         <link href="<?php bloginfo("template_url"); ?>/css/bootstrap-responsive.css" rel="stylesheet">
     <?php } ?>
@@ -54,6 +63,7 @@
         include("navbar.php");
         ?>
     </div>
+</div>
     <!-- Carousel ================================================== -->
     <?php
     if(get_option("nt_show_carousel") != "Не показывать"){
