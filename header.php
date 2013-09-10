@@ -16,21 +16,21 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
     <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <link href="<?php bloginfo("template_url"); ?>/css/bootstrap.css" rel="stylesheet">
     <?php if(trim(get_option('nt_background')) <> ""){ ?>
     <style>
         body {
             background: url("<?php echo get_option('nt_background'); ?>");
-            <?php if(get_option('nt_fixed_topmenu')) { ?>
-                padding-top: 50px;
-            <? } ?>
         }
     </style>
     <?php } ?>
-    <?php if(get_option('nt_responsive_css')){ ?>
-        <link href="<?php bloginfo("template_url"); ?>/css/bootstrap-responsive.css" rel="stylesheet">
+    <?php if(get_option('nt_fixed_topmenu')) { ?>
+    <style>
+        .masthead{
+            padding-top: 50px;
+        }
+    </style>
     <?php } ?>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -45,9 +45,13 @@
 
 <body>
 <div id="wrap">
-<div class="container">
-    <div class="masthead">
-        <div class="row">
+    <?php
+    if(get_option('nt_fixed_topmenu')) {
+        include("navbar.php");
+    }
+    ?>
+    <div class="container">
+        <div class="masthead">
             <div class="col-lg-8">
                 <h3 class="site-name"><a class="brand" href="<?php echo site_url(); ?>"><?php bloginfo('name'); ?></a></h3>
                 <h6 class="site-description"><?php bloginfo('description'); ?></h6>
@@ -59,11 +63,13 @@
                 ?>
             </div>
         </div>
-        <?php
-        include("navbar.php");
-        ?>
     </div>
-</div>
+    <?php
+    if(!get_option('nt_fixed_topmenu')) { ?>
+        <div class="container">
+            <?php include("navbar.php"); ?>
+        </div>
+    <?php } ?>
     <!-- Carousel ================================================== -->
     <?php
     if(get_option("nt_show_carousel") != "Не показывать"){

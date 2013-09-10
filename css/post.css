@@ -2,7 +2,7 @@
 
 }
 .attachment-thumbnail{
-    float: right;
+    /*float: left;*/
     padding: 1px;
     margin: 0 0 10px 10px;
     border: 1px solid #373737;

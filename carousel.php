@@ -1,4 +1,5 @@
 <div class="container">
+<div class="col-lg-12">
 <div id="myCarousel" class="carousel slide">
     <?php
     $myCounter = 0;
@@ -33,7 +34,7 @@
                         <?php }elseif(get_option('nt_show_posttext') == "Текст записи"){ ?>
                             <p><?php the_content(); ?></p>
                         <?php } ?>
-                        <a class="btn btn-large btn-primary" href="<?php the_permalink() ?>">Прочитать</a>
+                        <a class="btn btn-sm btn-primary" href="<?php the_permalink() ?>">Прочитать</a>
                     </div>
                 </div> <!-- post -->
             </div> <!-- post-wrapper -->
@@ -48,4 +49,5 @@
     <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
     <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div> <!-- /.carousel -->
+</div>
 </div>

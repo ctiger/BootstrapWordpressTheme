@@ -2,8 +2,8 @@
 Theme Name: BootstrapWordpressTheme
 Theme URI: http://prmv.ru
 Description:
-Version: 0.4
-Author: Шамиль Пирумов
+Version: 0.4.2
+Author: Shamil Pirumov
 Author URI: http://prmv.ru/
 
 */
@@ -14,7 +14,6 @@ Author URI: http://prmv.ru/
 
 @import 'css/layout.css';
 @import 'css/sidebar.css';
-@import 'css/bootstrapSwitch.css';
 @import 'css/header.css';
 @import 'css/navbar.css';
 @import 'css/carousel.css';

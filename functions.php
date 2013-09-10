@@ -54,8 +54,29 @@ if ( function_exists('register_sidebar') )
         'before_title' => '<h2 class="widgettitle">',
         'after_title' => '</h2>',
     ));
+/*    register_sidebar(array(
+        'name' => 'Боковая левая',
+        'before_widget' => '<div id="%1$s" class="panel panel-primary widget %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<div class="panel-heading"><h3 class="panel-title widgettitle">',
+        'after_title' => '</h3></div>',
+    ));
     register_sidebar(array(
-        'name' => 'Боковая',
+        'name' => 'Боковая правая',
+        'before_widget' => '<div id="%1$s" class="panel panel-success widget %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<div class="panel-heading"><h3 class="panel-title widgettitle">',
+        'after_title' => '</h3></div>',
+    ));*/
+    register_sidebar(array(
+        'name' => 'Боковая левая',
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget' => '</li>',
+        'before_title' => '<h2 class="widgettitle">',
+        'after_title' => '</h2>',
+    ));
+    register_sidebar(array(
+        'name' => 'Боковая правая',
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
         'before_title' => '<h2 class="widgettitle">',
@@ -314,16 +335,22 @@ $options = array(
         "type" => "textarea",
         "std" => "" ),
 
-    array ( "name" => "Responsive CSS",
-        "desc" => "Включать адаптивный Bootstrap CSS-код?",
-        "id" => $shortname . "_responsive_css",
-        "type" => "checkbox",
-        "std" => "" ),
-
     array ( "name" => "Верхнее меню",
         "desc" => "Прикрепить верхнее меню?",
         "id" => $shortname . "_fixed_topmenu",
         "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "name" => "Закрыть сайт",
+        "desc" => "Закрыть сайт для посещений, показывая посетителям заглушку (ниже). Если вы залогинены администратором - сайт будет показываться.",
+        "id" => $shortname . "_siteclose",
+        "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "name" => "Заглушка",
+        "desc" => "Если сайт закрыт, то показывать этот текст.",
+        "id" => $shortname . "_siteclosetext",
+        "type" => "textarea",
         "std" => "" ),
 
     array ( "type" => "close"),
@@ -371,7 +398,30 @@ $options = array(
 
     array ( "type" => "close"),
     /*===========================================================*/
+    array ( "name" => "Записи",
+        "type" => "section" ),
+    array ("type" => "open"),
 
+    array ( "name" => "Показывать хлебные крошки",
+        "desc" => "Если включено, то хлебные крошки будут отображаться при просмотре записи.",
+        "id" => $shortname . "_postbreadcrumbs",
+        "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "name" => "Панель записи",
+        "desc" => "Показывать панель с автором, датой записи и количеством комментариев.",
+        "id" => $shortname . "_postpanel",
+        "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "name" => "Показывать метки",
+        "desc" => "Если включено - метки будут отображаться.",
+        "id" => $shortname . "_posttags",
+        "type" => "checkbox",
+        "std" => "" ),
+
+    array ( "type" => "close"),
+    /*===========================================================*/
     array ( "name" => "Подвал",
         "type" => "section"),
 
@@ -469,7 +519,7 @@ function mytheme_admin(){
     <h2>Настройки <?php echo $themename ?></h2>
 
     <div class="rm_opts">
-    <form method="post">
+    <form method="post" role="form">
     <?php foreach($options as $value) {
         switch ($value['type']){
             case "open" :
@@ -502,7 +552,8 @@ function mytheme_admin(){
                     </label>
 
                     <input name="<?php echo $value['id']?>" id="<?php echo $value['id']?>" type="<?php echo $value['type']?>"
-                           value="<?php if (get_option($value['id']) != ""){ echo stripslashes(get_option($value['id'])); } else {echo $value["std"];} ?>" />
+                           value="<?php if (get_option($value['id']) != ""){ echo stripslashes(get_option($value['id'])); } else {echo $value["std"];} ?>"
+                           class="form-control" />
 
                     <small><?php echo $value['desc']; ?></small>
                     <div class="clearfix"></div>
@@ -518,7 +569,7 @@ function mytheme_admin(){
                         <?php echo $value['name']?>
                     </label>
 
-                    <textarea name="<?php echo $value['id']?>" type="<?php echo $value['type']?>" >
+                    <textarea name="<?php echo $value['id']?>" type="<?php echo $value['type']?>" class="form-control" >
                         <?php if (get_option($value['id']) != ""){
                             echo stripslashes(get_option($value['id']));
                         }else {
@@ -540,7 +591,7 @@ function mytheme_admin(){
                         <?php echo $value['name']?>
                     </label>
 
-                    <select name="<?php echo $value['id']; ?>" id="<?php echo $value['id']; ?>">
+                    <select name="<?php echo $value['id']; ?>" id="<?php echo $value['id']; ?>" class="form-control">
                         <?php foreach ($value['options'] as $option) : ?>
                             <option <?php if(get_option($value['id']) == $option){ echo "selected=selected";} ?>>
                                 <?php echo $option; ?>
@@ -594,7 +645,7 @@ function mytheme_admin(){
                     </h3>
 
                      <span class="submit">
-                            <button name="save<?php echo $i; ?>" type="submit" class="btn">Сохранить</button>
+                            <button name="save<?php echo $i; ?>" type="submit" class="btn btn-default">Сохранить</button>
                      </span>
                     <div class="clearfix"></div>
                 </div>

@@ -134,7 +134,7 @@
 }
 .has-switch label:active,
 .has-switch label.active {
-  background-color: #cccccc \9;
+  background-color: #cccccc;
 }
 .has-switch span {
   text-align: center;
@@ -179,7 +179,7 @@
 }
 .has-switch span.switch-right:active,
 .has-switch span.switch-right.active {
-  background-color: #e6e6e6 \9;
+  background-color: #e6e6e6;
 }
 .has-switch span.switch-primary,
 .has-switch span.switch-left {
@@ -220,7 +220,7 @@
 .has-switch span.switch-left:active,
 .has-switch span.switch-primary.active,
 .has-switch span.switch-left.active {
-  background-color: #006699 \9;
+  background-color: #006699;
 }
 .has-switch span.switch-info {
   color: #ffffff;
@@ -252,7 +252,7 @@
 }
 .has-switch span.switch-info:active,
 .has-switch span.switch-info.active {
-  background-color: #31b0d5 \9;
+  background-color: #31b0d5;
 }
 .has-switch span.switch-success {
   color: #ffffff;
@@ -284,7 +284,7 @@
 }
 .has-switch span.switch-success:active,
 .has-switch span.switch-success.active {
-  background-color: #42b142 \9;
+  background-color: #42b142 ;
 }
 .has-switch span.switch-warning {
   color: #ffffff;
@@ -316,7 +316,7 @@
 }
 .has-switch span.switch-warning:active,
 .has-switch span.switch-warning.active {
-  background-color: #fa9f1e \9;
+  background-color: #fa9f1e ;
 }
 .has-switch span.switch-danger {
   color: #ffffff;
@@ -348,5 +348,5 @@
 }
 .has-switch span.switch-danger:active,
 .has-switch span.switch-danger.active {
-  background-color: #e9322d \9;
+  background-color: #e9322d ;
 }

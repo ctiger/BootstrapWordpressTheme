@@ -1,5 +1,10 @@
 BootstrapWordpressTheme
 =======================
+* v 0.4.2<br />
+Add new settings in custom admin panel<br />
+Minor visual changes<br />
+Bug fixes<br />
+<br />
 * v 0.4.1<br />
 Add new settings in custom admin panel<br />
 Minor visual changes<br />
