@@ -1,25 +1,25 @@
 .masthead{
-
-}
-.masthead h3{
-    font-family: 'Lobster', sans-serif;
-    font-weight: 400;
-    font-size: 50px;
+    background: #e6e6e6;
+    padding-bottom: 20px;
 }
 .masthead h3 a{
+    font-weight: 300;
+    font-size: 50px;
     color: #d53433;
 }
-.masthead h6{
+.masthead h4{
     font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
+    font-weight: 300;
     color: #747474;
 }
 .masthead .widget{
     margin-top: 20px;
 }
 .center-widget{
-
+    background: #d5d5d5;
+    padding-bottom: 20px;
+    color: #000;
 }
-.center-widget .widget{
-
+.center-widget .widgettitle{
+    color: #000;
 }

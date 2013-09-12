@@ -5,9 +5,10 @@ if( get_option("nt_postbreadcrumbs")){
     if(is_single() || is_page() && !is_front_page()){
         breadcrumbs();
     }
-}
-if( is_category() ){ ?>
+}?>
     <div class="post-<?php the_ID(); ?>" id="post">
+    <?php
+    if( is_category() ){ ?>
         <div class="col-lg-2">
             <?php
             }
@@ -23,7 +24,7 @@ if( is_category() ){ ?>
         <div class="col-lg-10">
             <?php } ?>
             <?php if(is_single() || is_category()){ ?>
-    		    <h6 class="post_date"><?php the_time("d F, Y"); ?></h6>
+    		    <h4 class="post_date"><?php the_time("d F, Y"); ?></h4>
 	    	<?php } ?>
                 <h2 class="post_title">
                     <?php if(!is_single() && !is_page()){ ?>
@@ -64,14 +65,14 @@ if( is_category() ){ ?>
                 if(is_category()){
 		        ?>
             </div>
-        </div>
     <?php
     }
     if(is_single()){
         comments_template( '', true );
     }
     ?>
-    <p class="clearfix"></p>
+    </div>
+    <div class="clearfix"></div>
 
 <?php
 	endwhile;

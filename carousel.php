@@ -28,7 +28,7 @@
                 <?php the_post_thumbnail('full'); ?>
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1><?php the_title(); ?></h1>
+                        <h2><?php the_title(); ?></h2>
                         <?php if(get_option('nt_show_posttext') == "Цитату записи"){ ?>
                             <p><?php the_excerpt(); ?></p>
                         <?php }elseif(get_option('nt_show_posttext') == "Текст записи"){ ?>

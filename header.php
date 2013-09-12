@@ -16,8 +16,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <link href="<?php bloginfo("template_url"); ?>/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
     <?php if(trim(get_option('nt_background')) <> ""){ ?>
     <style>
         body {
@@ -50,11 +50,11 @@
         include("navbar.php");
     }
     ?>
-    <div class="container">
-        <div class="masthead">
+    <div class="masthead">
+        <div class="container">
             <div class="col-lg-8">
                 <h3 class="site-name"><a class="brand" href="<?php echo site_url(); ?>"><?php bloginfo('name'); ?></a></h3>
-                <h6 class="site-description"><?php bloginfo('description'); ?></h6>
+                <h4 class="site-description"><?php bloginfo('description'); ?></h4>
             </div>
             <div class="col-lg-4">
                 <?php

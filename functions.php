@@ -876,3 +876,48 @@ class WidgetChildrenPages extends WP_Widget{
     }
 }
 add_action('widgets_init', create_function('','return register_widget("WidgetChildrenPages");'));
+
+/* Show link on category */
+
+class WidgetCategoryLink extends WP_Widget{
+
+    public function WidgetCategoryLink() {
+        $widget_ops = array( 'classname' => 'widgetcategorylink', 'description' => 'Отображает ссылку на одну категорию' );
+        $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetcategorylink' );
+        parent::__construct( 'widgetcategorylink', 'WidgetCategoryLink', $widget_ops, $control_ops );
+    }
+
+    public function form($instance) { ?>
+        <label for="<?php echo $this->get_field_id('category_id');?>"><?php _e("Выберите рубрику"); ?></label>:
+        <?php
+        echo '<select name="'.$this->get_field_name('category_id').'" id="'.$this->get_field_id('category_id').'">';
+        $cats = get_categories('hide_empty=0');
+        foreach( $cats as $cat ){
+            $option = '<option value="' . $cat->cat_ID.'"';
+            if($cat->cat_ID == $instance['category_id']){
+                $option .= ' selected';
+            }
+            $option .= '>';
+            $option .= $cat->cat_name;
+            $option .= '</option>';
+            echo $option;
+        }
+        echo "</select>";
+    }
+
+    public function update($new_instance, $old_instance) {
+        return $new_instance;
+    }
+
+    public function widget($args, $instance) {
+        if ( $instance['category_id'] ){
+            echo $args['before_widget'],$args['before_title'];
+            $cat = get_category($instance['category_id']);
+            /*$cat_name = get_term($instance['category_id'],'category');*/
+            echo '<a href="'.get_category_link($instance['category_id']).'">'.$cat->cat_name.'</a>';
+            echo $args['after_title'];
+            echo $args['after_widget'];
+        }
+    }
+}
+add_action('widgets_init', create_function('','return register_widget("WidgetCategoryLink");'));

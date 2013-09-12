@@ -2,8 +2,8 @@
 if(!get_option("nt_siteclose") || is_user_logged_in() && current_user_can('administrator')){
     get_header();
 ?>
-<div class="container">
-    <div id="content">
+<div id="content">
+    <div class="container">
         <?php if(is_home() || is_front_page()){ ?>
         <div class="col-lg-3 sidebar">
             <?php
