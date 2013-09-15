@@ -25,6 +25,13 @@
             // carousel demo
             $('#myCarousel').carousel({<?php if(trim(get_option('nt_interval_carousel')) <> "") echo 'interval: '.get_option("nt_interval_carousel")?>})
         })
+        $(function(){
+            $('body').tooltip({
+                selector: "[rel=tooltip]",
+                placement: "top"
+            });
+        });
+
     }(window.jQuery)
 </script>
 </body>

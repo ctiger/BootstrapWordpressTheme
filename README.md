@@ -1,5 +1,9 @@
 BootstrapWordpressTheme
 =======================
+* v 0.5<br />
+Minor visual changes<br />
+Add new widget - show post as modal window.<br />
+<br />
 * v 0.4.3<br />
 Minor visual changes<br />
 Bug fixes<br />

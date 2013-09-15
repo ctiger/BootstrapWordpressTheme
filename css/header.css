@@ -1,5 +1,5 @@
 .masthead{
-    background: #e6e6e6;
+    /*background: #e6e6e6;*/
     padding-bottom: 20px;
 }
 .masthead h3 a{
@@ -22,4 +22,9 @@
 }
 .center-widget .widgettitle{
     color: #000;
+}
+.center-widget a{
+    font-weight: 400;
+    font-size: 20px;
+
 }

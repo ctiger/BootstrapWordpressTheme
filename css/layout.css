@@ -1,6 +1,6 @@
 *{
     font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
 }
 a:focus{
     outline: none;
@@ -20,17 +20,20 @@ a:focus{
 ul,li{
     list-style: none;
 }
-.widget{
+.widget, .widgetcategorylink{
     /*font-family: 'Open Sans', sans-serif;
     font-weight: 400;*/
 }
 .widget ul{
     padding: 10px;
 }
+.widgetcategorylink{
+    margin-top: 20px;
+}
 .widgettitle{
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
-    color: #747474;
+    color: #595959;
 }
 .alignleft{
     float: left;
@@ -40,4 +43,8 @@ ul,li{
 }
 .category_more_button{
 
+}
+.img-responsive{
+    border: 5px solid #fff;
+    border-radius: 10px;
 }

@@ -16,6 +16,18 @@ if ( function_exists('remove_filter') ) {
     remove_filter('comment_text', 'wptexturize');
 }
 
+/*Редирект на результат поиска*/
+/*Если найден только один результат - редирект на страницу*/
+add_action('template_redirect', 'redirect_single_post');
+function redirect_single_post() {
+    if (is_search()) {
+        global $wp_query;
+        if ($wp_query->post_count == 1) {
+            wp_redirect( get_permalink( $wp_query->posts['0']->ID ) );
+        }
+    }
+}
+
 /*Widgets*/
 if ( function_exists('register_sidebar') )
 {
@@ -30,29 +42,29 @@ if ( function_exists('register_sidebar') )
         'name' => 'Центр левый 1',
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
-        'before_title' => '<h2 class="widgettitle">',
-        'after_title' => '</h2>',
+        'before_title' => '<h3 class="widgettitle">',
+        'after_title' => '</h3>',
     ));
     register_sidebar(array(
         'name' => 'Центр левый 2',
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
-        'before_title' => '<h2 class="widgettitle">',
-        'after_title' => '</h2>',
+        'before_title' => '<h3 class="widgettitle">',
+        'after_title' => '</h3>',
     ));
     register_sidebar(array(
         'name' => 'Центр правый 1',
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
-        'before_title' => '<h2 class="widgettitle">',
-        'after_title' => '</h2>',
+        'before_title' => '<h3 class="widgettitle">',
+        'after_title' => '</h3>',
     ));
     register_sidebar(array(
         'name' => 'Центр правый 2',
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
-        'before_title' => '<h2 class="widgettitle">',
-        'after_title' => '</h2>',
+        'before_title' => '<h3 class="widgettitle">',
+        'after_title' => '</h3>',
     ));
 /*    register_sidebar(array(
         'name' => 'Боковая левая',
@@ -773,15 +785,15 @@ class WidgetPage extends WP_Widget{
         if ( $instance['page_id'] ){
             echo $args['before_widget'],$args['before_title'];
             $page = get_page($instance['page_id']);
-            echo $page->post_title;
+            echo "<a href='".get_page_link($instance['page_id'])."'>".$page->post_title."</a>";
             echo $args['after_title'];
-            echo "<a href='".get_page_link($instance['page_id'])."'>".get_the_post_thumbnail( $instance['page_id'], 'medium', array('class' => 'img-frontpage') )."</a>";
+            echo "<a href='".get_page_link($instance['page_id'])."'>".get_the_post_thumbnail( $instance['page_id'], 'medium', array('class' => 'img-responsive') )."</a>";
             if ( $instance['page_excerpt'] ){
                 echo "<p>".$instance['page_excerpt']."</p>";
             }else{
                 echo "<p>".$page->post_content."</p>";
             }
-            echo "<a class='btn btn-success' href='".get_page_link($instance['page_id'])."'>Подробнее</a>";
+            //echo "<a class='btn btn-success' href='".get_page_link($instance['page_id'])."'>Подробнее</a>";
             echo $args['after_widget'];
         }
     }
@@ -830,15 +842,15 @@ class WidgetPost extends WP_Widget{
         if ( $instance['post_id'] ){
             echo $args['before_widget'],$args['before_title'];
             $page = get_page($instance['post_id']);
-            echo $page->post_title;
+            echo "<a href='".get_permalink($instance['post_id'])."'>".$page->post_title."</a>";
             echo $args['after_title'];
-            echo "<a href='".get_permalink($instance['post_id'])."'>".get_the_post_thumbnail( $instance['post_id'], 'medium', array('class' => 'img-frontpage') )."</a>";
+            echo "<a href='".get_permalink($instance['post_id'])."'>".get_the_post_thumbnail( $instance['post_id'], 'medium', array('class' => 'img-responsive') )."</a>";
             if ( $instance['post_excerpt'] ){
                 echo "<p>".$instance['post_excerpt']."</p>";
             }else{
                 echo "<p>".$page->post_content."</p>";
             }
-            echo "<a class='btn btn-success' href='".get_permalink($instance['post_id'])."'>Подробнее</a>";
+            //echo "<a class='btn btn-success' href='".get_permalink($instance['post_id'])."'>Подробнее</a>";
             echo $args['after_widget'];
         }
     }
@@ -911,13 +923,92 @@ class WidgetCategoryLink extends WP_Widget{
 
     public function widget($args, $instance) {
         if ( $instance['category_id'] ){
-            echo $args['before_widget'],$args['before_title'];
+            echo $args['before_widget'];
+/*            echo $args['before_title'];
+            echo $args['after_title'];*/
             $cat = get_category($instance['category_id']);
             /*$cat_name = get_term($instance['category_id'],'category');*/
             echo '<a href="'.get_category_link($instance['category_id']).'">'.$cat->cat_name.'</a>';
-            echo $args['after_title'];
             echo $args['after_widget'];
         }
     }
 }
 add_action('widgets_init', create_function('','return register_widget("WidgetCategoryLink");'));
+
+/* Show post as modal windows */
+
+class WidgetModalPost extends WP_Widget{
+
+    public function WidgetModalPost() {
+        $widget_ops = array( 'classname' => 'widgetmodalpost', 'description' => 'Отображает запись, как модальное окно' );
+        $control_ops = array( 'width' => 200, 'height' => 250, 'id_base' => 'widgetmodalpost' );
+        parent::__construct( 'widgetmodalpost', 'WidgetModalPost', $widget_ops, $control_ops );
+    }
+
+    public function form($instance) { ?>
+        <label for="<?php echo $this->get_field_id('post_id');?>"><?php _e("Выберите запись"); ?></label>:
+        <?php
+        echo '<select name="'.$this->get_field_name('post_id').'" id="'.$this->get_field_id('post_id').'">';
+        $myposts = get_posts();
+        foreach( $myposts as $post ){
+            $option = '<option value="' . $post->ID.'"';
+            if($post->ID == $instance['post_id']){
+                $option .= ' selected';
+            }
+            $option .= '>';
+            $option .= $post->post_title;
+            $option .= '</option>';
+            echo $option;
+        }
+        echo "</select>";
+    }
+
+    public function update($new_instance, $old_instance) {
+        return $new_instance;
+    }
+
+    public function widget($args, $instance) {
+        if ( $instance['post_id'] ){
+            echo $args['before_widget'],$args['before_title'];
+            $page = get_page($instance['post_id']);
+            echo $page->post_title;
+            echo $args['after_title'];
+            ?>
+            <!-- Button trigger modal -->
+            <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Прочитать</a>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h2 class="widgettitle"><?php echo $page->post_title ?></h2>
+                        </div>
+                        <div class="modal-post">
+                            <?php
+                            echo get_the_post_thumbnail( $instance['post_id'], 'medium', array('class' => 'img-responsive') );
+                            echo "<p>".$page->post_content."</p>";
+                            ?>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <script>
+                !function ($) {
+                    $(function(){
+                        // carousel demo
+                        $('#myCarousel').carousel({<?php if(trim(get_option('nt_interval_carousel')) <> "") echo 'interval: '.get_option("nt_interval_carousel")?>})
+                    })
+                }(window.jQuery)
+            </script>
+            <?php
+
+            //echo "<a class='btn btn-success' href='".get_permalink($instance['post_id'])."'>Подробнее</a>";
+            echo $args['after_widget'];
+        }
+    }
+}
+add_action('widgets_init', create_function('','return register_widget("WidgetModalPost");'));
