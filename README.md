@@ -1,5 +1,8 @@
 BootstrapWordpressTheme
 =======================
+* v 0.5.1<br />
+Twitter Bootstrap update to v 3.3.4<br />
+<br />
 * v 0.5<br />
 Minor visual changes<br />
 Add new widget - show post as modal window.<br />
